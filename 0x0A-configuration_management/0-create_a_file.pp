@@ -1,8 +1,8 @@
-file {  '0-create_a_file.pp':
-    path    /temp
-    group    www-data
-    owner    www-data
-    content        I love Puppet
-    path    /tmp/school
-    permission    0744
+# creates a file in /tmp
+
+file { '/tmp/school':
+  content =>'I love Puppet',
+  mode    => '0744',
+  owner   => 'www-data',
+  group   => 'www-data',
 }
