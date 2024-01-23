@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+# Installs Nginx listens on port 80 and returns a hello world
+# when a GET request sent sent to /.
+
+#  updates the package lists
+apt-get update
+# installs the Nginx web server (accepting all options).
+apt-get install -y nginx
+
+# Creates the /etc/nginx/html directory
+mkdir /etc/nginx/html
+#  creates an empty index.html file inside the /etc/nginx/html directory.
+touch /etc/nginx/html/index.html
+#  Writes "Hello World!" to the the index.html file
+echo "Hello World!" > /etc/nginx/html/index.html
+# Sets the Nginx server with the ff configurations
+printf %s "server {
+     listen      80;
+     listen      [::]:80 default_server;
+     root        /etc/nginx/html;
+     index       index.html index.htm;
+}
+" > /etc/nginx/sites-available/default
+
+# Configure a new server block for redirection
+echo "server {
+    listen 80;
+    listen [::]:80;
+
+    root /var/www/html;
+
+    index index.html index.htm index.nginx-debian.html;
+
+    location /redirect_me {
+        return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
+    }
+}" | sudo tee /etc/nginx/sites-available/redirect
+
+# Enable the new  configuration
+sudo ln -s /etc/nginx/sites-available/redirect /etc/nginx/sites-enabled/
+
+
+# Test Nginx server configuration and reload
+sudo nginx -t
+sudo service nginx reload
