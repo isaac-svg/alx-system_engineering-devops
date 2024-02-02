@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Bash to check about subdomains.
+# Bash script to check about subdomains.
 function check_domain {
 	names=("www" "lb-01" "web-01" "web-02")
 
